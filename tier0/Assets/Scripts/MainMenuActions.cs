@@ -16,6 +16,8 @@ public class MainMenuActions : MonoBehaviour
         
     }
 
+    public BejeweledGameMgr GameMgr;
+
     public void OnUserClick_NewGame()
     {
 
