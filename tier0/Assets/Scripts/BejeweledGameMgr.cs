@@ -213,9 +213,13 @@ namespace SidiaUnityChallenge
                         if (ix >= 0 && ix <= bufferSizeX - 1 &&
                             iy >= 0 && iy <= bufferSizeY - 1)
                         {
-                            
                             int iBlock = buffer[ix, iy];
-                            if (iBlock > 0)
+                                                        
+                            //----------------------------------------------------------------
+                            // Renato - 22/10/2020 - solved iBlock bug: on index 0 block type
+                            //----------------------------------------------------------------
+                            
+                            if (iBlock > -1)
                             {
                                 // block hit
 
@@ -223,7 +227,7 @@ namespace SidiaUnityChallenge
                                 if (mouseDownThisFrame)
                                 {
                                     Debug.Log("mouse click --> x:" + ix + " y:" + iy);
-
+                                    
 
                                     moveBlock = iBlock;
                                     moveBlockGO = bufferGO[ix, iy];
@@ -238,7 +242,7 @@ namespace SidiaUnityChallenge
                                 }
                             }
 
-                            if (moveBlock > 0)
+                            if (moveBlock > -1)
                             {
                                 // moving block
                                 Vector3 targetPosition;
@@ -277,8 +281,8 @@ namespace SidiaUnityChallenge
                                             Vector3 newPos;
                                             Vector3 fromPos;
 
-                                            fromPos = moveBlockGO.transform.position;
-                                            newPos = moveBlockGO.transform.position;
+                                            fromPos = moveBlockGO.transform.localPosition;
+                                            newPos = moveBlockGO.transform.localPosition;
                                             newPos += deltaPos;
 
 
@@ -295,14 +299,18 @@ namespace SidiaUnityChallenge
                                                 newPos.y = bufferSizeY - 1;
 
 
+                                            //debug
+                                            //Debug.Log("from position:" + fromPos);
+                                            //Debug.Log("to position:" + newPos);
+
                                             // move block to new position
-                                            moveBlockGO.transform.position = newPos;
+                                            moveBlockGO.transform.localPosition = newPos;
 
                                             //---------------------------------
                                             // swap blocks on the new position
                                             //---------------------------------
                                             GameObject moveBlockGO2 = bufferGO[ix, iy];
-                                            moveBlockGO2.transform.position = fromPos;
+                                            moveBlockGO2.transform.localPosition = fromPos;
 
 
                                             // update internal buffer
@@ -326,6 +334,12 @@ namespace SidiaUnityChallenge
                                             Debug.Log("from block:" + iFromX);// saveBlockIdx);
                                             Debug.Log("target block:" + ix);// iBlock);
 
+                                            //debug
+                                            //Debug.Log("from block:" + moveBlockGO.name, moveBlockGO);// saveBlockIdx);
+                                            //if (saveBlock == null)
+                                            //    Debug.Log("target block is null");// iBlock);
+                                            //else
+                                            //    Debug.Log("target block:" + saveBlock.name, saveBlock);// iBlock);
 
                                             #endregion
                                         }
